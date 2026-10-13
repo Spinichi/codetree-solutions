@@ -5,26 +5,37 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         int n = sc.nextInt();
         
-        ArrayDeque<Integer> que = new ArrayDeque<>();
-        int[] dp = new int[n+2];
-        dp[1] = 0;
-        dp[2] = 1;
-        if(n==1) {
-            System.out.println(0);
-            return;
+        ArrayDeque<int[]> que = new ArrayDeque<>();
+        boolean[] visited = new boolean[n+3];
+        que.offer(new int[] {n,0});
+        visited[n] = true;
+        int answer = -1;
+        while(!que.isEmpty()) {
+            int[] arr = que.poll();
+            int curNum = arr[0];
+            int cnt = arr[1];
+            if(curNum==1) {
+                answer = cnt;
+                break;
+            }
+            if(!visited[curNum-1]) {
+                que.offer(new int[] {curNum-1,cnt+1});
+                visited[curNum-1] = true;
+            }
+            if(curNum+1 < n+3 && !visited[curNum+1]) {
+                que.offer(new int[] {curNum+1,cnt+1});
+                visited[curNum+1] = true;
+            }
+            if(curNum%2==0 && !visited[curNum/2]) {
+                que.offer(new int[] {curNum/2,cnt+1});
+                visited[curNum/2] = true;
+            }
+            if(curNum%3==0 && !visited[curNum/3]) {
+                que.offer(new int[] {curNum/3,cnt+1});
+                visited[curNum/3] = true;
+            }
         }
-        dp[3] = 1;
-        int ans = Integer.MAX_VALUE;
-        for(int i=4; i<=n; i++) {
-            ans = dp[i-1]+1;
-            if(i%2==0) ans = Math.min(ans, dp[i/2]+1);
-            if(i%3==0) ans = Math.min(ans, dp[i/3]+1);
-            if((i+1)%2==0) ans = Math.min(ans, dp[(i+1)/2]+2);
-            if((i+1)%3==0) ans = Math.min(ans, dp[(i+2)/3]+2);
-            dp[i] = ans;
-        }
-
-        System.out.println(dp[n]);
+     System.out.println(answer);
 
     }
 }
