@@ -73,7 +73,7 @@ public class Main {
         for(int i =idx;i<wallCnt;i++) {
             if(selectedWalls[i]) continue;
             selectedWalls[i] = true;
-            selectWalls(idx+1,depth+1);
+            selectWalls(i+1,depth+1);
             selectedWalls[i] = false;
         }
     }
