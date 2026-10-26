@@ -13,10 +13,12 @@ public class Main {
         int r = sc.nextInt()-1;
         int c = sc.nextInt()-1;
         // Please write your code here.
-        ArrayList<int[]> list = new ArrayList<>();
+
         while(k-->0) {
             int target = grid[r][c];
             ArrayDeque<int[]> que = new ArrayDeque<>();
+            int[] next = new int[2];
+            int max = -1;
             boolean[][] visited = new boolean[n][n];
             que.offer(new int[] {r,c});
             visited[r][c] = true;
@@ -29,21 +31,28 @@ public class Main {
                     int nc = cc + dc[d];
                     if(nr>=0&&nr<n&&nc>=0&&nc<n&&target>grid[nr][nc]&&!visited[nr][nc]) {
                         que.offer(new int[] {nr,nc});
-                        list.add(new int[] {nr,nc,grid[nr][nc]});
                         visited[nr][nc] = true;
+                        if(grid[nr][nc]>max) {
+                            max = grid[nr][nc];          
+                            next[0] = nr;
+                            next[1] = nc;
+                        } else if (grid[nr][nc]==max) {
+                            if(next[0]>nr) {
+                                next[0] = nr;
+                                next[1] = nc;
+                            } else if(next[0]==nr && next[1]>nc) {
+                                next[0] = nr;
+                                next[1] = nc;
+                            }
+                        }
                     }
                 }
             }
-            if(list.size()==0) break;
-            Collections.sort(list,(a,b) -> {
-                if(a[2]!=b[2]) return Integer.compare(b[2],a[2]);
-                if(a[0]!=b[0]) return Integer.compare(a[0],b[0]);
-                else return Integer.compare(a[1],b[1]);
-            });
-            int[] next = list.get(0);
+
+            
+            if(max==-1) break;
             r = next[0];
             c = next[1];
-            list = new ArrayList<>();
         }
         System.out.println((r+1) + " "+ (c+1));
     }
